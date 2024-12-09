@@ -1,10 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { addDays, format } from "date-fns"
-import type { DateRange } from "react-day-picker"
+import { format } from "date-fns"
+import { createParser, useQueryState } from "nuqs"
 
 import { cn } from "@/lib/utils"
 import { Button, type ButtonProps } from "@/components/ui/button"
@@ -15,6 +14,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+const parseAsDate = createParser({
+  parse(queryValue) {
+    return new Date(queryValue)
+  },
+  serialize(value) {
+    return format(value, "yyyy-MM-dd")
+  },
+})
+
 interface DateRangePickerProps
   extends React.ComponentPropsWithoutRef<typeof PopoverContent> {
   /**
@@ -23,7 +31,7 @@ interface DateRangePickerProps
    * @type DateRange
    * @example { from: new Date(), to: new Date() }
    */
-  dateRange?: DateRange
+  // dateRange?: DateRange
 
   /**
    * The number of days to display in the date range picker.
@@ -31,7 +39,7 @@ interface DateRangePickerProps
    * @type number
    * @example 7
    */
-  dayCount?: number
+  // dayCount?: number
 
   /**
    * The placeholder text of the calendar trigger button.
@@ -63,8 +71,8 @@ interface DateRangePickerProps
 }
 
 export function DateRangePicker({
-  dateRange,
-  dayCount,
+  // dateRange,
+  // dayCount,
   placeholder = "Pick a date",
   triggerVariant = "outline",
   triggerSize = "default",
@@ -72,64 +80,17 @@ export function DateRangePicker({
   className,
   ...props
 }: DateRangePickerProps) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-
-  const fromParam = searchParams.get("from")
-  const toParam = searchParams.get("to")
-
-  function calcDateRange() {
-    let fromDay: Date | undefined
-    let toDay: Date | undefined
-
-    if (dateRange) {
-      fromDay = dateRange.from
-      toDay = dateRange.to
-    } else if (dayCount) {
-      toDay = new Date()
-      fromDay = addDays(toDay, -dayCount)
-    }
-
-    return {
-      from: fromParam ? new Date(fromParam) : fromDay,
-      to: toParam ? new Date(toParam) : toDay,
-    }
-  }
-
-  const [date, setDate] = React.useState<DateRange | undefined>(() =>
-    calcDateRange()
+  const [fromDate, setFromDate] = useQueryState(
+    "from",
+    parseAsDate.withOptions({ shallow: false, history: "push" })
+  )
+  const [toDate, setToDate] = useQueryState(
+    "to",
+    parseAsDate.withOptions({ shallow: false, history: "push" })
   )
 
-  // Update query string
-  React.useEffect(() => {
-    const newSearchParams = new URLSearchParams(searchParams)
-    if (date?.from) {
-      newSearchParams.set("from", format(date.from, "yyyy-MM-dd"))
-    } else {
-      newSearchParams.delete("from")
-    }
-
-    if (date?.to) {
-      newSearchParams.set("to", format(date.to, "yyyy-MM-dd"))
-    } else {
-      newSearchParams.delete("to")
-    }
-
-    router.replace(`${pathname}?${newSearchParams.toString()}`, {
-      scroll: false,
-    })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date?.from, date?.to])
-
-  // React.useEffect(() => {
-  //   const dateRange = calcDateRange()
-
-  //   setDate(dateRange)
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [fromParam, toParam])
+  const from = fromDate ?? undefined
+  const to = toDate ?? undefined
 
   return (
     <div className="grid gap-2">
@@ -140,19 +101,19 @@ export function DateRangePicker({
             size={triggerSize}
             className={cn(
               "w-full justify-start truncate text-left font-normal",
-              !date && "text-muted-foreground",
+              !fromDate && !toDate && "text-muted-foreground",
               triggerClassName
             )}
           >
             <CalendarIcon className="mr-2 size-4" />
-            {date?.from ? (
-              date.to ? (
+            {fromDate ? (
+              toDate ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(fromDate, "LLL dd, y")} -{" "}
+                  {format(toDate, "LLL dd, y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(fromDate, "LLL dd, y")
               )
             ) : (
               <span>{placeholder}</span>
@@ -163,9 +124,15 @@ export function DateRangePicker({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={from}
+            selected={{ from, to }}
+            disabled={(date) => date > new Date()}
+            onSelect={(value) => {
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              setFromDate(value?.from ?? null)
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              setToDate(value?.to ?? null)
+            }}
             numberOfMonths={2}
           />
         </PopoverContent>

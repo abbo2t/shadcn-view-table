@@ -116,7 +116,7 @@ export function CreateTaskDialog() {
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Do a kickflip"
+                      placeholder="Build a reusable combobox"
                       className="resize-none"
                       {...field}
                     />

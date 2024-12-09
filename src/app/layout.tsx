@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/react"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -84,18 +85,20 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           fontMono.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="relative flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-          </div>
-          <TailwindIndicator />
-        </ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+            </div>
+            <TailwindIndicator />
+          </ThemeProvider>
+        </NuqsAdapter>
         <Toaster richColors />
         <Analytics />
       </body>
