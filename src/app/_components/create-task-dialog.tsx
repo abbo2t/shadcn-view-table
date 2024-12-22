@@ -90,7 +90,12 @@ export function CreateTaskDialog() {
           <TooltipContent className="flex items-center gap-2 border bg-accent font-semibold text-foreground dark:bg-background/95 dark:backdrop-blur-md dark:supports-[backdrop-filter]:bg-background/40">
             Add new task
             <div>
-              <Kbd variant="outline">⇧</Kbd> <Kbd variant="outline">N</Kbd>
+              <Kbd variant="outline" className="font-sans">
+                ⇧
+              </Kbd>{" "}
+              <Kbd variant="outline" className="font-sans">
+                N
+              </Kbd>
             </div>
           </TooltipContent>
         </Tooltip>

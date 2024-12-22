@@ -63,7 +63,12 @@ export function TasksTableToolbarActions({
           <TooltipContent className="flex items-center gap-2 border bg-accent font-semibold text-foreground dark:bg-background/95 dark:backdrop-blur-md dark:supports-[backdrop-filter]:bg-background/40">
             Export csv
             <div>
-              <Kbd variant="outline">⇧</Kbd> <Kbd variant="outline">E</Kbd>
+              <Kbd variant="outline" className="font-sans">
+                ⇧
+              </Kbd>{" "}
+              <Kbd variant="outline" className="font-sans">
+                E
+              </Kbd>
             </div>
           </TooltipContent>
         </Tooltip>

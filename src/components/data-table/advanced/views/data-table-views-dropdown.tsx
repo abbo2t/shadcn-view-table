@@ -97,8 +97,12 @@ export function DataTableViewsDropdown({
           <TooltipContent className="flex items-center gap-2 border bg-accent font-semibold text-foreground dark:bg-background/95 dark:backdrop-blur-md dark:supports-[backdrop-filter]:bg-background/40">
             Open views
             <div>
-              <Kbd variant="outline">{isMac ? "⌘" : "ctrl"}</Kbd>{" "}
-              <Kbd variant="outline">V</Kbd>
+              <Kbd variant="outline" className="font-sans">
+                {isMac ? "⌘" : "ctrl"}
+              </Kbd>{" "}
+              <Kbd variant="outline" className="font-sans">
+                V
+              </Kbd>
             </div>
           </TooltipContent>
         </Tooltip>

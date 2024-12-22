@@ -89,7 +89,12 @@ export function DataTableFilterCombobox<TData>({
             <TooltipContent className="flex items-center gap-2 border bg-accent font-semibold text-foreground dark:bg-background/95 dark:backdrop-blur-md dark:supports-[backdrop-filter]:bg-background/40">
               Open filter
               <div>
-                <Kbd variant="outline">⇧</Kbd> <Kbd variant="outline">F</Kbd>
+                <Kbd variant="outline" className="font-sans">
+                  ⇧
+                </Kbd>{" "}
+                <Kbd variant="outline" className="font-sans">
+                  F
+                </Kbd>
               </div>
             </TooltipContent>
           </Tooltip>
