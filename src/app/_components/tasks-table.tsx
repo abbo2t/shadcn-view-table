@@ -67,6 +67,7 @@ export function TasksTable({ tasksPromise, viewsPromise }: TasksTableProps) {
   ]
 
   const { table } = useDataTable({
+    // @ts-ignore
     data,
     columns,
     pageCount,

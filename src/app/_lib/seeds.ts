@@ -1,4 +1,4 @@
-import { db } from "@/db"
+import { db } from "../../db"
 import { tasks, type Task } from "@/db/schema"
 
 import { generateRandomTask } from "./utils"
