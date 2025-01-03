@@ -43,7 +43,7 @@ Shadcn table component with server side sorting, pagination, filtering, and cust
 5. Start the development server
 
    ```bash
-   pnpm dev
+   pnpm dev -p 3001
    ```
 
 You can read more about setting up your own table [here](https://github.com/sadmann7/shadcn-table?tab=readme-ov-file#build-your-own-table).

@@ -11,6 +11,26 @@ import { filterColumn } from "@/lib/filter-column"
 import { type GetTasksSchema } from "./validations"
 import { da } from "@faker-js/faker"
 
+import { type InventoryItem } from "./types"
+
+export async function getInventoryItems() {
+  try {
+    const response = await fetch('http://next.ddev.site/api/inventory/items-by-quantity/2631/1999-11-04')
+    // @ts-ignore
+    const data: InventoryItem[] = await response.json()
+    return {
+      data,
+      total: data.length
+    }
+  } catch (error) {
+    console.error('Error fetching inventory items:', error)
+    return {
+      data: [],
+      total: 0
+    }
+  }
+}
+
 export async function getTasks(input: GetTasksSchema) {
   noStore()
   const { page, per_page, sort, title, status, priority, operator, from, to } =

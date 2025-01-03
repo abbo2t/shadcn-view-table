@@ -8,7 +8,7 @@ export const siteConfig = {
     "Shadcn table component with server side sorting, pagination, filtering, and custom views.",
   url:
     env.NODE_ENV === "development"
-      ? "http://localhost:3000"
+      ? "http://localhost:3001"
       : "https://view-table.nainglinnkhant.com",
   links: { github: "https://github.com/nainglinnkhant/shadcn-view-table" },
 }
